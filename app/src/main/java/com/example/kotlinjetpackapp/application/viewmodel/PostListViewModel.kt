@@ -1,5 +1,6 @@
 package com.example.kotlinjetpackapp.application.viewmodel
 
+import android.util.Log
 import android.widget.Button
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
@@ -10,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinjetpackapp.application.model.Posts
 import com.example.kotlinjetpackapp.application.model.repository.PostListRepo
 import com.example.kotlinjetpackapp.application.views.adapter.PostListAdapter
+import com.example.kotlinjetpackapp.utility.AppUtility
 import com.example.kotlinjetpackapp.utility.singleArgViewModelFactory
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.lang.Exception
 
 /**
@@ -24,6 +27,7 @@ class PostListViewModel(private val postListRepo: PostListRepo) : ViewModel() {
 
     private var mutableLiveData: LiveData<List<Posts>>? = null
     private var isLoading=MutableLiveData<Boolean>(false)
+    var errorMessage=MutableLiveData<String?>()
 
     fun getAllPosts() {
         launchDataLoad {
@@ -58,6 +62,10 @@ class PostListViewModel(private val postListRepo: PostListRepo) : ViewModel() {
         }
     }
 
+    fun errorMessageShown(){
+        errorMessage.value=null
+    }
+
     @BindingAdapter("data")
     fun setRecyclerViewProperties(recyclerView:RecyclerView,list:List<Posts>){
         if(recyclerView.adapter  is PostListAdapter){
@@ -66,10 +74,17 @@ class PostListViewModel(private val postListRepo: PostListRepo) : ViewModel() {
     }
 
     private fun launchDataLoad(block: suspend () -> Unit): Unit {
+        if(!AppUtility.isInternetConnected()){
+            errorMessage.value="Please check your internet connection"
+            return
+        }
+
         viewModelScope.launch {
             try {
                 isLoading.value = true
                 block()
+            }catch (http: HttpException){
+                errorMessage.value="Error code : ${http.code()} ${http.message()}"
             } catch (error: Exception) {
                 error.printStackTrace()
             } finally {

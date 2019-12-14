@@ -18,6 +18,7 @@ import com.example.kotlinjetpackapp.application.views.adapter.OnRecyclerItemClic
 import com.example.kotlinjetpackapp.application.views.adapter.PostListAdapter
 import com.example.kotlinjetpackapp.databinding.ActivityPostListBinding
 import com.example.kotlinjetpackapp.roomdb.AppDatabase
+import com.example.kotlinjetpackapp.utility.ThisApplication
 
 class PostListActivity : AppCompatActivity() ,View.OnClickListener{
 
@@ -74,7 +75,17 @@ class PostListActivity : AppCompatActivity() ,View.OnClickListener{
                 binding.progressLoading.visibility = if (it) View.VISIBLE else View.GONE
             }
         })
+
+        postListViewModel.errorMessage.observe(this@PostListActivity,object:Observer<String?>{
+            override fun onChanged(t: String?) {
+               t?.let {
+                   ThisApplication.showToast(it)
+                   postListViewModel.errorMessageShown()
+               }
+            }
+        })
     }
+
 
     override fun onClick(p0: View?) {
         when(p0?.id){
