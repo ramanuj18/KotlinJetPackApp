@@ -7,8 +7,8 @@ class AppConstant {
     companion object{
         //Room DB
         const val ROOM_DB_VERSION=1
-        const val ROOM_DB_NAME="posts_db"
-        const val POST_TABLE_NAME="posts"
+        const val ROOM_DB_NAME="post_db"
+        const val POST_TABLE_NAME="post"
 
         //Api request url
         const val getAllPosts="/posts"
