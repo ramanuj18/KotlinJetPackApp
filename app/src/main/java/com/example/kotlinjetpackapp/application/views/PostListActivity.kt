@@ -3,6 +3,8 @@ package com.example.kotlinjetpackapp.application.views
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -18,15 +20,19 @@ import com.example.kotlinjetpackapp.application.views.adapter.OnRecyclerItemClic
 import com.example.kotlinjetpackapp.application.views.adapter.PostListAdapter
 import com.example.kotlinjetpackapp.databinding.ActivityPostListBinding
 import com.example.kotlinjetpackapp.roomdb.AppDatabase
+import com.example.kotlinjetpackapp.sync_adapter.SyncAdapterManager
 import com.example.kotlinjetpackapp.utility.ThisApplication
 
 class PostListActivity : AppCompatActivity() ,View.OnClickListener{
 
+    lateinit var syncAdapterManager: SyncAdapterManager
+
     private lateinit var postListViewModel: PostListViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityPostListBinding = DataBindingUtil.setContentView(this, R.layout.activity_post_list)
-
+        syncAdapterManager= SyncAdapterManager(this)
         val postDao = AppDatabase.invoke().postDao()
         val serviceApi = ApiClient.getServices()
         val postListRepo = PostListRepo(serviceApi, postDao)
@@ -116,5 +122,20 @@ class PostListActivity : AppCompatActivity() ,View.OnClickListener{
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menu_refresh->{
+            syncAdapterManager.refreshData()
+                return true
+            }
+        }
+        return false
     }
 }

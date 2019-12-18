@@ -3,6 +3,9 @@
           package="com.example.kotlinjetpackapp">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
 
     <application
             android:name=".utility.ThisApplication"
@@ -22,7 +25,33 @@
             </intent-filter>
         </activity>
         <activity android:name=".application.views.MainActivity">
+
         </activity>
+        <service
+                android:name="com.example.kotlinjetpackapp.sync_adapter.AuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+                    android:name="android.accounts.AccountAuthenticator"
+                    android:resource="@xml/authenticator" />
+        </service>
+
+        <provider
+                android:name=".sync_adapter.AppProvider"
+                android:authorities="com.example.kotlinjetpackapp.provider"
+                android:exported="false"
+                android:syncable="true"/>
+        <service
+                android:name="com.example.kotlinjetpackapp.sync_adapter.SyncService"
+                android:exported="true">
+            <!--android:process=":sync"-->
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                       android:resource="@xml/syncadapter" />
+        </service>
     </application>
 
 </manifest>
