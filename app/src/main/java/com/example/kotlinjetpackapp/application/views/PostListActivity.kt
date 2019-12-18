@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.kotlinjetpackapp.R
 import com.example.kotlinjetpackapp.apiclient.ApiClient
-import com.example.kotlinjetpackapp.application.model.Posts
+import com.example.kotlinjetpackapp.application.model.Post
 import com.example.kotlinjetpackapp.application.model.repository.PostListRepo
 import com.example.kotlinjetpackapp.application.viewmodel.PostListViewModel
 import com.example.kotlinjetpackapp.application.views.adapter.OnRecyclerItemClick
@@ -43,14 +43,14 @@ class PostListActivity : AppCompatActivity() ,View.OnClickListener{
         binding.floatingActionButton.setOnClickListener(this@PostListActivity)
 
         val postAdapter = PostListAdapter(this, object : OnRecyclerItemClick {
-            override fun onItemClick(post: Posts) {
+            override fun onItemClick(post: Post) {
                 val intent = Intent(this@PostListActivity, PostDetailActivity::class.java)
                 intent.putExtra("post", post)
                 intent.putExtra("updated",true)
                 startActivityForResult(intent, 101)
             }
 
-            override fun onItemLongClick(post: Posts) {
+            override fun onItemLongClick(post: Post) {
                 val builder = AlertDialog.Builder(this@PostListActivity)
                     .setMessage("do you want to delete this post?")
                     .setCancelable(false)
@@ -67,8 +67,8 @@ class PostListActivity : AppCompatActivity() ,View.OnClickListener{
             }
         })
 
-        postListViewModel.getAllPostsFromLocalDb()?.observe(this@PostListActivity, object : Observer<List<Posts>> {
-            override fun onChanged(t: List<Posts>?) {
+        postListViewModel.getAllPostsFromLocalDb()?.observe(this@PostListActivity, object : Observer<List<Post>> {
+            override fun onChanged(t: List<Post>?) {
                 t?.let {
                     postAdapter.setData(it)
                 }
@@ -97,7 +97,7 @@ class PostListActivity : AppCompatActivity() ,View.OnClickListener{
         when(p0?.id){
             R.id.floating_action_button->{
                 val intent = Intent(this@PostListActivity, PostDetailActivity::class.java)
-                intent.putExtra("post", Posts())
+                intent.putExtra("post", Post())
                 intent.putExtra("updated",false)
                 startActivityForResult(intent, 102)
             }
@@ -110,13 +110,13 @@ class PostListActivity : AppCompatActivity() ,View.OnClickListener{
             when (requestCode) {
                 101 -> {
                     data?.let {
-                        val posts = it.getSerializableExtra("updated_post") as Posts
+                        val posts = it.getSerializableExtra("updated_post") as Post
                         postListViewModel.updatePost(posts)
                     }
                 }
                 102->{
                     data?.let {
-                        val posts = it.getSerializableExtra("updated_post") as Posts
+                        val posts = it.getSerializableExtra("updated_post") as Post
                         postListViewModel.addPost(posts)
                     }
                 }

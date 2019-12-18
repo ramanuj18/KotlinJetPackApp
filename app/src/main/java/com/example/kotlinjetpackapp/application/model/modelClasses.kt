@@ -12,7 +12,7 @@ import java.io.Serializable
  */
 
 @Entity(tableName = AppConstant.POST_TABLE_NAME)
-class Posts : Serializable {
+class Post : Serializable {
     @SerializedName("userId")
     @ColumnInfo(name="userId")
     var userId: Int? = null

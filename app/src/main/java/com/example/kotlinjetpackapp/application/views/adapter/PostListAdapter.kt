@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinjetpackapp.R
-import com.example.kotlinjetpackapp.application.model.Posts
+import com.example.kotlinjetpackapp.application.model.Post
 import com.example.kotlinjetpackapp.databinding.PostsItemLayoutBinding
 
 /**
@@ -15,7 +15,7 @@ import com.example.kotlinjetpackapp.databinding.PostsItemLayoutBinding
 class PostListAdapter(var context: Context, var onRecyclerItemClick: OnRecyclerItemClick) :
     RecyclerView.Adapter<PostListAdapter.ViewHolder>() {
 
-    var postList = emptyList<Posts>()
+    var postList = emptyList<Post>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -40,7 +40,7 @@ class PostListAdapter(var context: Context, var onRecyclerItemClick: OnRecyclerI
         }
     }
 
-    fun setData(list: List<Posts>) {
+    fun setData(list: List<Post>) {
         postList = list
         notifyDataSetChanged()
     }

@@ -1,12 +1,10 @@
 package com.example.kotlinjetpackapp.application.model.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.kotlinjetpackapp.apiclient.ServicesApi
-import com.example.kotlinjetpackapp.application.model.Posts
+import com.example.kotlinjetpackapp.application.model.Post
 import com.example.kotlinjetpackapp.application.model.daoclasses.PostsDao
 import com.example.kotlinjetpackapp.utility.AppUtility
-import retrofit2.HttpException
 
 /**
  * created by Ramanuj Kesharawani on 10/12/19
@@ -18,16 +16,16 @@ class PostListRepo(private val apiService: ServicesApi, private val postsDao: Po
             postsDao.insertAllPosts(postList)
     }
 
-    fun getAllPostsFromLocalDb(): LiveData<List<Posts>> {
+    fun getAllPostsFromLocalDb(): LiveData<List<Post>> {
         return postsDao.getAllPosts()
     }
 
-    suspend fun addPost(post: Posts){
+    suspend fun addPost(post: Post){
             val posts=apiService.addPost(post)
             postsDao.insertPost(posts)
     }
 
-    suspend fun updatePost(post: Posts){
+    suspend fun updatePost(post: Post){
             val posts=apiService.updatePost(post.id.toString(),AppUtility.getJsonObject(post))
             postsDao.updatePost(posts)
     }

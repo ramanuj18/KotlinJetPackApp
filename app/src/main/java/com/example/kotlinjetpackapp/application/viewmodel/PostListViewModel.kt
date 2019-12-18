@@ -1,14 +1,12 @@
 package com.example.kotlinjetpackapp.application.viewmodel
 
-import android.util.Log
-import android.widget.Button
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kotlinjetpackapp.application.model.Posts
+import com.example.kotlinjetpackapp.application.model.Post
 import com.example.kotlinjetpackapp.application.model.repository.PostListRepo
 import com.example.kotlinjetpackapp.application.views.adapter.PostListAdapter
 import com.example.kotlinjetpackapp.utility.AppUtility
@@ -25,7 +23,7 @@ class PostListViewModel(private val postListRepo: PostListRepo) : ViewModel() {
         val FACTORY = singleArgViewModelFactory(::PostListViewModel)
     }
 
-    private var mutableLiveData: LiveData<List<Posts>>? = null
+    private var mutableLiveData: LiveData<List<Post>>? = null
     private var isLoading=MutableLiveData<Boolean>(false)
     var errorMessage=MutableLiveData<String?>()
 
@@ -35,13 +33,13 @@ class PostListViewModel(private val postListRepo: PostListRepo) : ViewModel() {
         }
     }
 
-    fun addPost(post: Posts){
+    fun addPost(post: Post){
         launchDataLoad {
             postListRepo.addPost(post)
         }
     }
 
-    fun getAllPostsFromLocalDb(): LiveData<List<Posts>>? {
+    fun getAllPostsFromLocalDb(): LiveData<List<Post>>? {
         mutableLiveData = postListRepo.getAllPostsFromLocalDb()
         return mutableLiveData
     }
@@ -50,7 +48,7 @@ class PostListViewModel(private val postListRepo: PostListRepo) : ViewModel() {
         return isLoading
     }
 
-    fun updatePost(post: Posts){
+    fun updatePost(post: Post){
        launchDataLoad {
             postListRepo.updatePost(post)
         }
@@ -67,7 +65,7 @@ class PostListViewModel(private val postListRepo: PostListRepo) : ViewModel() {
     }
 
     @BindingAdapter("data")
-    fun setRecyclerViewProperties(recyclerView:RecyclerView,list:List<Posts>){
+    fun setRecyclerViewProperties(recyclerView:RecyclerView,list:List<Post>){
         if(recyclerView.adapter  is PostListAdapter){
             (recyclerView.adapter as PostListAdapter).setData(list)
         }

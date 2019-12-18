@@ -1,6 +1,6 @@
 package com.example.kotlinjetpackapp.apiclient
 
-import com.example.kotlinjetpackapp.application.model.Posts
+import com.example.kotlinjetpackapp.application.model.Post
 import com.google.gson.JsonObject
 import retrofit2.http.*
 
@@ -10,15 +10,15 @@ import retrofit2.http.*
 interface ServicesApi {
 
     @GET
-    suspend fun getAllPosts(@Url url: String): List<Posts>
+    suspend fun getAllPosts(@Url url: String): List<Post>
 
     @PUT("posts/{id}")
-    suspend fun updatePost(@Path("id") id:String, @Body requestBody: JsonObject): Posts
+    suspend fun updatePost(@Path("id") id:String, @Body requestBody: JsonObject): Post
 
     @DELETE("posts/{id}")
-    suspend fun deletePost(@Path("id") id:String):Posts
+    suspend fun deletePost(@Path("id") id:String):Post
 
-    @POST("posts")
-    suspend fun addPost(@Body posts: Posts):Posts
+    @POST("post")
+    suspend fun addPost(@Body post: Post):Post
 
 }
